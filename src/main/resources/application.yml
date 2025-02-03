@@ -1,0 +1,10 @@
+server:
+  port: ${PORT:9080}
+
+spring:
+  application:
+    name: ${SERVICE_NAME:test-education-project}
+
+logging:
+  level:
+    org.springframework: ${LOGGING_LEVEL_SPRING:INFO}
