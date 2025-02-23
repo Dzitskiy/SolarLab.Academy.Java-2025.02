@@ -4,7 +4,14 @@ server:
 spring:
   application:
     name: ${SERVICE_NAME:test-education-project}
+  jpa:
+    show-sql: true
 
 logging:
   level:
     org.springframework: ${LOGGING_LEVEL_SPRING:INFO}
+
+super:
+  duper:
+    test:
+      phrase: "Hello, World!"
