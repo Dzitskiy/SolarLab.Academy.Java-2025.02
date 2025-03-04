@@ -5,11 +5,10 @@ import com.solarl.education.request.NotificationRequest;
 import com.solarl.education.response.NotificationResponse;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(value = "notification.telegram", havingValue = "true")
+//@ConditionalOnProperty(value = "notification.telegram", havingValue = "true")
 public class TelegramNotificationService extends NotificationService {
 
     public TelegramNotificationService(NotificationRepository notificationRepository) {

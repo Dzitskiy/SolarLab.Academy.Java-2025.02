@@ -7,11 +7,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(value = "notification.telegram", havingValue = "false")
+//@ConditionalOnProperty(value = "notification.telegram", havingValue = "false")
 public class EmailNotificationService extends NotificationService {
 
     @Autowired
@@ -32,9 +31,6 @@ public class EmailNotificationService extends NotificationService {
 
     public NotificationResponse sendNotification(NotificationRequest notificationRequest) {
         EmailSender emailSender = emailSender1.getObject();
-        if (emailSender == null) {
-            throw new IllegalStateException("EmailSender не инициализирован!");
-        }
         emailSender.doSomething();
         System.out.println("Отправка уведомления на почту: " + notificationRequest);
         return NotificationResponse.builder()
