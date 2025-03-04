@@ -1,0 +1,21 @@
+//plugins for compiling project and dependencies
+plugins {
+    id 'java'  //for support java
+    id 'org.springframework.boot' version '3.1.12'  //plugin spring for building project
+//    id 'io.spring.dependency-management' version '1.1.2'  //control version of spring plugins
+}
+
+//specifying a compatible version of Java
+java {
+    sourceCompatibility = '21'
+}
+
+//use repositories for resolving dependencies
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //include Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.1.12'
+}
