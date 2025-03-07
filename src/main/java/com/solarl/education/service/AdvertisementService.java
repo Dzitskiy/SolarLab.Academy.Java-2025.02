@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,26 +26,50 @@ public class AdvertisementService {
     public AdvertisementResponse getAdvertisement(Long id) {
         System.out.println("Получение объявления из бд по ИД: " + id);
         return AdvertisementResponse.builder()
-                .cost(20)
-                .name("Kia Rio")
-                .category("Car")
-                .subcategory("Sport Car")
-                .description("Super puper sport car")
-                .address("BM 23")
-                .createDateTime(LocalDateTime.now())
-                .build();
+                                    .cost(20)
+                                    .name("Kia Rio")
+                                    .category("Car")
+                                    .subcategory("Sport Car")
+                                    .description("Super puper sport car")
+                                    .address("BM 23")
+                                    .createDateTime(LocalDateTime.now())
+                                    .build();
+    }
+
+    public List<AdvertisementResponse> getAdvertisements(Integer limit) {
+        System.out.printf("Получение объявления из бд %s записей%n", limit);
+        return List.of(
+                AdvertisementResponse.builder()
+                                     .cost(20)
+                                     .name("Kia Rio")
+                                     .category("Car")
+                                     .subcategory("Sport Car")
+                                     .description("Super puper sport car")
+                                     .address("BM 23")
+                                     .createDateTime(LocalDateTime.now())
+                                     .build(),
+                AdvertisementResponse.builder()
+                                     .cost(25)
+                                     .name("Cherry Tiggo 4")
+                                     .category("Car")
+                                     .subcategory("Crossover")
+                                     .description("Pro max ultra luxury edition")
+                                     .address("BM 24")
+                                     .createDateTime(LocalDateTime.now())
+                                     .build()
+        );
     }
 
     public AdvertisementResponse updateAdvertisement(Long id, AdvertisementRequest advertisementRequest) {
         System.out.println("Редактирование объявления из бд по ИД: " + id);
         return AdvertisementResponse.builder()
-                .cost(advertisementRequest.getCost())
-                .name(advertisementRequest.getName())
-                .category(advertisementRequest.getCategory())
-                .subcategory(advertisementRequest.getSubcategory())
-                .description(advertisementRequest.getDescription())
-                .address(advertisementRequest.getAddress())
-                .build();
+                                    .cost(advertisementRequest.getCost())
+                                    .name(advertisementRequest.getName())
+                                    .category(advertisementRequest.getCategory())
+                                    .subcategory(advertisementRequest.getSubcategory())
+                                    .description(advertisementRequest.getDescription())
+                                    .address(advertisementRequest.getAddress())
+                                    .build();
     }
 
     public void deleteAdvertisement(Long id) {

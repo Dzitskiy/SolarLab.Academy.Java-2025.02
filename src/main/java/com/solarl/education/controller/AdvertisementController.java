@@ -8,27 +8,26 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("v1/advertisements")
 @Tag(name = "Сервис объявлений", description = "API доступа к объявлениям")
+@Validated
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;
 
-    @PostMapping("/create")
+    @PostMapping()
     @Operation(summary = "Создание объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Успех"),
@@ -38,12 +37,25 @@ public class AdvertisementController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createAdvertisement(
             @Parameter(description = "Запрос на отправку уведомления")
-            @RequestBody AdvertisementRequest advertisementRequest) {
+            @RequestBody @Valid AdvertisementRequest advertisementRequest) {
         advertisementService.createAdvertisement(advertisementRequest);
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping()
+    @Operation(summary = "Постраничное получение объявлений")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успех"),
+            @ApiResponse(responseCode = "400", description = "Неверно переданные данные"),
+            @ApiResponse(responseCode = "500", description = "Ошибка работы сервиса")
+    })
+    public List<AdvertisementResponse> getAdvertisementPage(
+            @Parameter(description = "Количество элементов на странице")
+            @RequestParam(value = "limit", required = false) @Positive Integer limit) {
+        return advertisementService.getAdvertisements(limit);
+    }
+
+    @GetMapping("{id}")
     @Operation(summary = "Получение объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успех"),
@@ -52,11 +64,11 @@ public class AdvertisementController {
     })
     public AdvertisementResponse getAdvertisement(
             @Parameter(description = "Идентификатор объявления")
-            @PathVariable Long id) {
+            @PathVariable @PositiveOrZero Long id) {
         return advertisementService.getAdvertisement(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("{id}")
     @Operation(summary = "Редактирование объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успех"),
@@ -65,15 +77,15 @@ public class AdvertisementController {
     })
     public AdvertisementResponse updateAdvertisement(
             @Parameter(description = "Идентификатор объявления")
-            @PathVariable Long id,
+            @PathVariable @PositiveOrZero Long id,
             @Parameter(description = "Объявление")
             @RequestBody AdvertisementRequest advertisementRequest) {
         return advertisementService.updateAdvertisement(id, advertisementRequest);
     }
 
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Редактирование объявления")
+    @DeleteMapping("{id}")
+    @Operation(summary = "Удаление объявления")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успех"),
             @ApiResponse(responseCode = "400", description = "Неверно переданные данные"),
@@ -81,7 +93,7 @@ public class AdvertisementController {
     })
     public void deleteAdvertisement(
             @Parameter(description = "Идентификатор объявления")
-            @PathVariable Long id) {
+            @PathVariable @PositiveOrZero Long id) {
         advertisementService.deleteAdvertisement(id);
     }
 

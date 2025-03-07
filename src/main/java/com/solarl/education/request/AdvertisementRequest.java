@@ -1,5 +1,7 @@
 package com.solarl.education.request;
 
+import com.solarl.education.validation.CapitalLetter;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +14,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdvertisementRequest {
+    @NotBlank(message = "Наименование должно быть передано")
+    @CapitalLetter
     private String name;
+    @NotBlank
     private String category;
+    @NotBlank
     private String subcategory;
+    @Positive
     private Integer cost;
     private String description;
     private String address;
+    @PastOrPresent
     private LocalDateTime createDateTime;
 }
