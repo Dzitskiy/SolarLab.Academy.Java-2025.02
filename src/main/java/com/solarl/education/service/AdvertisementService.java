@@ -1,5 +1,8 @@
 package com.solarl.education.service;
 
+import com.solarl.education.entity.Advertisement;
+import com.solarl.education.mapper.AdvertisementMapper;
+import com.solarl.education.repository.AdvertisementRepository;
 import com.solarl.education.request.AdvertisementRequest;
 import com.solarl.education.response.AdvertisementResponse;
 import jakarta.annotation.PostConstruct;
@@ -9,10 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AdvertisementService {
+
+    private final AdvertisementRepository advertisementRepository;
+    private final AdvertisementMapper advertisementMapper;
 
     @PostConstruct
     public void preInitialisation() {
@@ -21,19 +28,14 @@ public class AdvertisementService {
 
     public void createAdvertisement(AdvertisementRequest advertisementRequest) {
         System.out.println("Создание объявления: " + advertisementRequest);
+        Advertisement advertisement = advertisementMapper.toAdvertisement(advertisementRequest);
+        advertisementRepository.save(advertisement);
     }
 
     public AdvertisementResponse getAdvertisement(Long id) {
         System.out.println("Получение объявления из бд по ИД: " + id);
-        return AdvertisementResponse.builder()
-                                    .cost(20)
-                                    .name("Kia Rio")
-                                    .category("Car")
-                                    .subcategory("Sport Car")
-                                    .description("Super puper sport car")
-                                    .address("BM 23")
-                                    .createDateTime(LocalDateTime.now())
-                                    .build();
+        Optional<Advertisement> advertisement = advertisementRepository.findById(id);
+        return advertisement.map(advertisementMapper::toAdvertisementResponse).orElse(null);
     }
 
     public List<AdvertisementResponse> getAdvertisements(Integer limit) {
