@@ -4,8 +4,22 @@ server:
 spring:
   application:
     name: ${SERVICE_NAME:test-education-project}
+  datasource:
+    url: jdbc:postgresql://localhost:5432/solarl
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
   jpa:
+    hibernate:
+      ddl-auto: none
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 
 notification:
   telegram: false
