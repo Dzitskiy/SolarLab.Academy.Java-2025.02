@@ -13,6 +13,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,6 +86,7 @@ public class AdvertisementController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     @Operation(summary = "Удаление объявления")
     @ApiResponses(value = {

@@ -2,6 +2,12 @@ server:
   port: ${PORT:9080}
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/master
+          jwk-set-uri: http://localhost:8080/realms/master/protocol/openid-connect/certs
   application:
     name: ${SERVICE_NAME:test-education-project}
   datasource:
@@ -20,6 +26,12 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+keycloak:
+  realm: master
+  auth-server-url: http://localhost:8080
+  resource: avito
+  public-client: true
+  bearer-only: true
 
 notification:
   telegram: false

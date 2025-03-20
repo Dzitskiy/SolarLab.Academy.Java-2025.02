@@ -44,6 +44,15 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
+    // authentication
+    // Spring Security dependencies
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    // Keycloak adapter dependencies
+    implementation 'org.keycloak:keycloak-spring-boot-starter:23.0.4'
+    implementation 'org.keycloak:keycloak-spring-security-adapter:23.0.4'
+
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
