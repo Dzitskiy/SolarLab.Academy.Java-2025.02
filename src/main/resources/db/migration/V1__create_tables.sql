@@ -8,6 +8,5 @@ CREATE TABLE advertisement
     description VARCHAR(500),
     seller VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    create_date_time TIMESTAMP DEFAULT now(),
-    user_id INT REFERENCES users (id) ON DELETE CASCADE
+    create_date_time TIMESTAMP DEFAULT now()
 )
