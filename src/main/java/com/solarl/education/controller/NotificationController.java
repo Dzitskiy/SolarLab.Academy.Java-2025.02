@@ -1,11 +1,11 @@
 package com.solarl.education.controller;
 
 import com.solarl.education.request.NotificationRequest;
-import com.solarl.education.response.NotificationResponse;
 import com.solarl.education.service.NotificationFactory;
 import com.solarl.education.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,13 +27,13 @@ public class NotificationController {
             @ApiResponse(responseCode = "400", description = "Неверно переданные данные"),
             @ApiResponse(responseCode = "500", description = "Ошибка работы сервиса")
     })
-    public NotificationResponse sendNotification(
+    public void sendNotification(
             @Parameter(description = "Запрос на отправку уведомления")
             @RequestBody NotificationRequest notificationRequest,
             @Parameter(description = "telegram/email")
-            @RequestParam String type) {
+            @RequestParam @Schema(allowableValues = {"telegram", "email"}, type = "String") String type) {
         NotificationService notificationService = notificationFactory.getNotificationService(type);
-        return notificationService.sendNotification(notificationRequest);
+        notificationService.sendNotification(notificationRequest);
     }
 
 }

@@ -25,6 +25,20 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls.enable: false
+
+telegram:
+  bot:
+    username: "AcademyNotificationBot"
+    token: ""
+    chat-id: ""  # ID чата, куда отправлять сообщения
 
 keycloak:
   realm: master
@@ -33,8 +47,6 @@ keycloak:
   public-client: true
   bearer-only: true
 
-notification:
-  telegram: false
 
 logging:
   level:

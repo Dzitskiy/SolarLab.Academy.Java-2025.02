@@ -1,47 +1,32 @@
 package com.solarl.education.service;
 
-import com.solarl.education.repository.NotificationRepository;
 import com.solarl.education.request.NotificationRequest;
-import com.solarl.education.response.NotificationResponse;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.solarl.education.response.AdvertisementResponse;
+import lombok.AllArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-//@ConditionalOnProperty(value = "notification.telegram", havingValue = "false")
-public class EmailNotificationService extends NotificationService {
+@AllArgsConstructor
+public class EmailNotificationService implements NotificationService {
 
-    @Autowired
-    private ObjectProvider<EmailSender> emailSender1;
+    private final JavaMailSender mailSender;
 
-//    public void setEmailSender(EmailSender emailSender) {
-//        this.emailSender = emailSender;
-//    }
-
-    public EmailNotificationService(NotificationRepository notificationRepository) {
-        super(notificationRepository);
+    public void sendNotification(NotificationRequest notificationRequest) {
+        send(notificationRequest.getEmail(), "NOTIFICATION", notificationRequest.getMessage());
     }
 
-    @PostConstruct
-    public void preInitialisation() {
-        System.out.println("Создание бина EmailNotificationService");
+    public void sendAdvertisement(AdvertisementResponse advertisement) {
+        send("test@example.com", "ADVERTISEMENT", advertisement.toString());
     }
 
-    public NotificationResponse sendNotification(NotificationRequest notificationRequest) {
-        EmailSender emailSender = emailSender1.getObject();
-        emailSender.doSomething();
-        System.out.println("Отправка уведомления на почту: " + notificationRequest);
-        return NotificationResponse.builder()
-                .message(notificationRequest.getMessage())
-                .status(200)
-                .build();
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        System.out.println("Удаление бина EmailNotificationService");
+    public void send(String email, String subject, String message) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(message);
+        mailSender.send(mailMessage);
     }
 
 }
