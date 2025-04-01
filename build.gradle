@@ -7,7 +7,7 @@ plugins {
 
 //specifying a compatible version of Java
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '20'
 }
 
 //use repositories for resolving dependencies

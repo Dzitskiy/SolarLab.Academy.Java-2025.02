@@ -1,22 +1,23 @@
-package com.solarl.education.response;
+package com.solarl.education.request;
 
+import com.solarl.education.validation.CapitalLetter;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdvertisementResponse {
-    private Long id;
+public class AdvertisementUpdateRequest {
+
+    @CapitalLetter
     private String name;
-    private String category;
-    private String subcategory;
+
+    @Positive
     private Integer cost;
+
     private String description;
-    private LocalDateTime createDateTime;
 }

@@ -24,7 +24,6 @@ public class AdvertisementRequest {
     @Positive
     private Integer cost;
     private String description;
-    private String address;
     @PastOrPresent
     private LocalDateTime createDateTime;
 }

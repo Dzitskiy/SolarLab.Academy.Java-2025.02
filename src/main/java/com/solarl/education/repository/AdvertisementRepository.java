@@ -19,10 +19,18 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
     @Query("SELECT a FROM Advertisement a WHERE LOWER(a.name) = LOWER(:name)")
     Optional<Advertisement> findByNameIgnoreCase(@Param("name") String name);
 
+    Optional<Advertisement> findByName(String name);
+
+    List<Advertisement> findByCategoryAndCostGreaterThanEqual(CategoryEnum category, Integer cost);
+
+    List<Advertisement> findByIdIn(List<Long> ids);
+
     @Query(value = "SELECT * FROM advertisement WHERE seller = :seller", nativeQuery = true)
     List<Advertisement> findBySeller(@Param("seller") String seller);
 
     @Query(value = "SELECT * FROM advertisement WHERE cost BETWEEN :minCost AND :maxCost", nativeQuery = true)
     List<Advertisement> findByCostRange(@Param("minCost") Integer minCost, @Param("maxCost") Integer maxCost);
+
+    void deleteByName(String name);
 }
 

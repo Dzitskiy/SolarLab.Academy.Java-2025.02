@@ -45,9 +45,6 @@ public class Advertisement {
     @Column(name = "seller")
     private String seller;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "create_date_time", nullable = false)
     @CreationTimestamp
     private LocalDateTime createDateTime;
