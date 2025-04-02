@@ -13,6 +13,10 @@ import java.util.Optional;
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
 
+    Optional<Advertisement> findByName(String name);
+
+    List<Advertisement> findByIdIn(List<Long> ids);
+
     @Query("SELECT a FROM Advertisement a WHERE a.category = :category")
     List<Advertisement> findByCategory(@Param("category") CategoryEnum category);
 
