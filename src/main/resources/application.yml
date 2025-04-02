@@ -1,7 +1,6 @@
 server:
   port: ${PORT:9080}
 
-spring:
   application:
     name: ${SERVICE_NAME:test-education-project}
   datasource:

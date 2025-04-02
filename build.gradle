@@ -26,6 +26,10 @@ dependencies {
     // Драйвер PostgreSQL
     runtimeOnly 'org.postgresql:postgresql'
 
+    //caching
+    implementation 'org.springframework.boot:spring-boot-starter-cache:3.1.12'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
     //MapStruct
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'

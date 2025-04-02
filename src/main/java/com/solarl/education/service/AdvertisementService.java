@@ -11,7 +11,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -20,29 +23,34 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@CacheConfig(cacheNames = "adv")
 @RequiredArgsConstructor
 public class AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
     private final AdvertisementMapper advertisementMapper;
+    private final CacheManager cacheManager;
 
     @PostConstruct
     public void preInitialisation() {
         log.info("Создание бина AdvertisementService");
     }
 
+    @Cacheable
     public AdvertisementResponse createAdvertisement(AdvertisementRequest request) {
         log.info("Создание объявления: " + request);
         Advertisement advertisement = advertisementMapper.toAdvertisement(request);
         return advertisementMapper.toAdvertisementResponse(advertisementRepository.save(advertisement));
     }
 
+    @Cacheable(key = "#name")
     public AdvertisementResponse getAdvertisement(String name) {
         log.info("Получение объявления из бд по имени: " + name);
         Optional<Advertisement> advertisement = advertisementRepository.findByName(name);
         return advertisement.map(advertisementMapper::toAdvertisementResponse).orElse(null);
     }
 
+        @Cacheable(key = "#category + '_' + #cost", condition = "#category.name() != 'TRANSPORT'", unless = "#result.size == 0")
     public List<AdvertisementResponse> getAdvertisementsByCategoryAndCost(CategoryEnum category, Integer cost) {
         log.info("Получение объявлений из бд по цене больше чем {} и категории {} ", cost, category);
 
@@ -57,6 +65,12 @@ public class AdvertisementService {
         return advertisementMapper.toListAdvertisementResponse(advertisements);
     }
 
+    @Caching(
+            cacheable = {
+                    @Cacheable(key = "#name"),
+                    @Cacheable(value = "basket", key = "#name")
+            }
+    )
     public AdvertisementResponse addAdvertisementToBasket(String name) {
         log.info("Добавление объявления в корзину: " + name);
         Optional<Advertisement> advertisement = advertisementRepository.findByName(name);
@@ -69,6 +83,13 @@ public class AdvertisementService {
         return advertisementMapper.toAdvertisementResponse(advertisement.get());
     }
 
+    @Caching(
+            cacheable = @Cacheable(value = "payment", keyGenerator = "paymentKeyGenerator"),
+            evict = {
+                    @CacheEvict(allEntries = true),
+                    @CacheEvict(value = "basket", allEntries = true)
+            }
+    )
     public List<AdvertisementResponse> payPurchasesFromBasket(List<Long> ids) {
         log.info("Оплата объявлений из корзины: " + ids.size());
         List<Advertisement> advertisements = advertisementRepository.findByIdIn(ids);
@@ -82,6 +103,7 @@ public class AdvertisementService {
         return advertisementMapper.toListAdvertisementResponse(advertisements);
     }
 
+    @CachePut(key = "#name")
     public AdvertisementResponse updateAdvertisement(String name, AdvertisementUpdateRequest request) {
         log.info("Редактирование объявления из бд по имени: " + name);
         Optional<Advertisement> advertisementOpt = advertisementRepository.findByName(name);
@@ -96,6 +118,8 @@ public class AdvertisementService {
         return advertisementMapper.toAdvertisementResponse(advertisementRepository.save(advertisement));
     }
 
+    @Transactional
+    @CacheEvict(key = "#name")
     public void deleteAdvertisement(String name) {
         log.info("Удаление объявления из бд по имени: " + name);
 
