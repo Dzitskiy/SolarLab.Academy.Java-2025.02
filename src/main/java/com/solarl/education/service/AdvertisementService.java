@@ -2,6 +2,7 @@ package com.solarl.education.service;
 
 import com.solarl.education.entity.Advertisement;
 import com.solarl.education.mapper.AdvertisementMapper;
+import com.solarl.education.producer.KafkaProducerService;
 import com.solarl.education.repository.AdvertisementRepository;
 import com.solarl.education.request.AdvertisementRequest;
 import com.solarl.education.response.AdvertisementResponse;
@@ -10,7 +11,6 @@ import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +20,7 @@ public class AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
     private final AdvertisementMapper advertisementMapper;
+    private final KafkaProducerService producerService;
 
     @PostConstruct
     public void preInitialisation() {
@@ -30,6 +31,7 @@ public class AdvertisementService {
         System.out.println("Создание объявления: " + advertisementRequest);
         Advertisement advertisement = advertisementMapper.toAdvertisement(advertisementRequest);
         advertisementRepository.save(advertisement);
+        producerService.sendAdvertisement(advertisementMapper.toAdvertisementResponse(advertisement));
     }
 
     public AdvertisementResponse getAdvertisement(Long id) {

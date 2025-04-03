@@ -2,6 +2,7 @@ package com.solarl.education.service;
 
 import com.solarl.education.entity.Advertisement;
 import com.solarl.education.mapper.AdvertisementMapper;
+import com.solarl.education.producer.KafkaProducerService;
 import com.solarl.education.repository.AdvertisementRepository;
 import com.solarl.education.request.AdvertisementRequest;
 import com.solarl.education.response.AdvertisementResponse;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +32,9 @@ class AdvertisementServiceTest {
 
     @Mock
     private AdvertisementMapper advertisementMapper;
+
+    @Mock
+    private KafkaProducerService producerService;
 
     @InjectMocks
     private AdvertisementService advertisementService;
@@ -91,10 +94,12 @@ class AdvertisementServiceTest {
     @Test
     void createAdvertisement() {
         when(advertisementMapper.toAdvertisement(advertisementRequest)).thenReturn(advertisement);
+        when(advertisementMapper.toAdvertisementResponse(advertisement)).thenReturn(advertisementResponse);
 
         advertisementService.createAdvertisement(advertisementRequest);
 
         verify(advertisementRepository).save(advertisement);
+        verify(producerService).sendAdvertisement(advertisementResponse);
     }
 
     @Test
