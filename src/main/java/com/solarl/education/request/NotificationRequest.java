@@ -15,7 +15,7 @@ public class NotificationRequest {
 
     private String email;
 
-    private String phone;
+    private String chatId;
 
     private String message;
 

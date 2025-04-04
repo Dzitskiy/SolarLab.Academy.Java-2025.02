@@ -1,36 +1,56 @@
 package com.solarl.education.service;
 
-import com.solarl.education.repository.NotificationRepository;
 import com.solarl.education.request.NotificationRequest;
-import com.solarl.education.response.NotificationResponse;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+import com.solarl.education.response.AdvertisementResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
-//@ConditionalOnProperty(value = "notification.telegram", havingValue = "true")
-public class TelegramNotificationService extends NotificationService {
+public class TelegramNotificationService extends TelegramLongPollingBot implements NotificationService {
 
-    public TelegramNotificationService(NotificationRepository notificationRepository) {
-        super(notificationRepository);
+    @Value("${telegram.bot.username}")
+    private String botUsername;
+
+    @Value("${telegram.bot.token}")
+    private String botToken;
+
+    @Value("${telegram.bot.chat-id}")
+    private String chatId;
+
+    @Override
+    public void onUpdateReceived(Update update) {
+        // Обработка входящих сообщений
     }
 
-    @PostConstruct
-    public void preInitialisation() {
-        System.out.println("Создание бина TelegramNotificationService");
+    public void sendNotification(NotificationRequest notificationRequest) {
+        send(notificationRequest.getChatId(), notificationRequest.getMessage());
+
+    }
+
+    public void sendAdvertisement(AdvertisementResponse advertisement) {
+        send(chatId, advertisement.toString());
+    }
+
+    public void send(String chatId, String message) {
+        SendMessage sendMessage = new SendMessage(chatId, message);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException("Failed to send Telegram message", e);
+        }
     }
 
     @Override
-    public NotificationResponse sendNotification(NotificationRequest notificationRequest) {
-        System.out.println("Отправка уведомления в телегу: " + notificationRequest);
-        return NotificationResponse.builder()
-                .message(notificationRequest.getMessage())
-                .status(200)
-                .build();
+    public String getBotUsername() {
+        return botUsername;
     }
 
-    @PreDestroy
-    public void preDestroy() {
-        System.out.println("Удаление бина TelegramNotificationService");
+    @Override
+    public String getBotToken() {
+        return botToken;
     }
 }
