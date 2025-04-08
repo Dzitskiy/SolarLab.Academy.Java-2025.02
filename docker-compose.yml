@@ -1,5 +1,21 @@
-version: '3.8'
 services:
+
+  web-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web-api
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/solarl
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SERVER_PORT=9080
+    ports:
+      - "9080:9080"
+    depends_on:
+      - postgres
+    networks:
+      - kafka-net
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
