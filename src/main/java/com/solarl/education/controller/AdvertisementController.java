@@ -70,6 +70,32 @@ public class AdvertisementController {
         return advertisementService.getAdvertisement(id);
     }
 
+    @PostMapping("/add/basket/{id}")
+    @Operation(summary = "Добавление объявления в корзину")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успех"),
+            @ApiResponse(responseCode = "400", description = "Неверно переданные данные"),
+            @ApiResponse(responseCode = "500", description = "Ошибка работы сервиса")
+    })
+    public AdvertisementResponse addAdvertisementToBasket(
+            @Parameter(description = "Идентификатор объявления")
+            @PathVariable @PositiveOrZero Long id) {
+        return advertisementService.addAdvertisementToBasket(id);
+    }
+
+    @PostMapping("/pay/basket")
+    @Operation(summary = "Оплата объявлений из корзины")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успех"),
+            @ApiResponse(responseCode = "400", description = "Неверно переданные данные"),
+            @ApiResponse(responseCode = "500", description = "Ошибка работы сервиса")
+    })
+    public List<AdvertisementResponse> payPurchasesFromBasket(
+            @Parameter(description = "Идентификаторы объявлений")
+            @RequestParam List<Long> ids) {
+        return advertisementService.payPurchasesFromBasket(ids);
+    }
+
     @PutMapping("{id}")
     @Operation(summary = "Редактирование объявления")
     @ApiResponses(value = {
