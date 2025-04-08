@@ -27,6 +27,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache:3.1.12'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
+    //kafka
+    implementation("org.springframework.kafka:spring-kafka:3.1.0")
+
     // Драйвер PostgreSQL
     runtimeOnly 'org.postgresql:postgresql'
 
@@ -48,10 +51,18 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
+    //email
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+
+    //telegram
+    implementation("org.telegram:telegrambots-spring-boot-starter:6.9.0")
+
     // authentication
     // Spring Security dependencies
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // Keycloak adapter dependencies
     implementation 'org.keycloak:keycloak-spring-boot-starter:23.0.4'
