@@ -35,8 +35,8 @@ jobs:
 
       # Шаг 4: Сборка проекта
       - name: Build project
-        run: ./gradlew build --no-daemon
+        run: ./gradlew.sh build --no-daemon
 
       # Шаг 5: Запуск тестов
       - name: Run tests
-        run: ./gradlew test --no-daemon
+        run: ./gradlew.sh test --no-daemon
