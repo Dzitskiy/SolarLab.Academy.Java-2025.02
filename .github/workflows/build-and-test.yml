@@ -18,10 +18,10 @@ jobs:
         uses: actions/checkout@v4
 
       # Шаг 2: Установка JDK
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       # Шаг 3: Кэширование зависимостей Gradle
@@ -35,8 +35,8 @@ jobs:
 
       # Шаг 4: Сборка проекта
       - name: Build project
-        run: ./gradlew.sh build --no-daemon
+        run: ./gradlew build --no-daemon
 
       # Шаг 5: Запуск тестов
       - name: Run tests
-        run: ./gradlew.sh test --no-daemon
+        run: ./gradlew test --no-daemon
