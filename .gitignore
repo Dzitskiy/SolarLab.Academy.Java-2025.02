@@ -8,13 +8,13 @@
 
 ### Gradle template
 .gradle
-build/
-gradle/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-gradlew
-gradlew.bat
+#build/
+#gradle/
+#!gradle/wrapper/gradle-wrapper.jar
+#!**/src/main/**/build/
+#!**/src/test/**/build/
+#gradlew
+#gradlew.bat
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -160,5 +160,5 @@ local.properties
 
 # Exclude LunaLib.jar
 !env/luna-lib/*
-/gradlew
-/gradlew.bat
+#/gradlew
+#/gradlew.bat
