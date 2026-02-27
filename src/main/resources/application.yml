@@ -11,6 +11,9 @@ logging:
   level:
     org.springframework: ${LOGGING_LEVEL_SPRING:INFO}
 
+notification:
+  telegram: false
+
 super:
   duper:
     test:
